@@ -1,0 +1,60 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.arefbhrn.libraries'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 100
+        versionName "1.0.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            name 'justifiedtextview'
+            description 'A library to achieve justified TextView for both RTL and LTR texts'
+            url 'https://github.com/arefbhrn/JustifiedTextView'
+            inceptionYear '2018'
+
+            packaging 'aar'
+            groupId 'com.arefbhrn.libraries'
+            artifactId 'justifiedtextview'
+            version '1.0.2'
+
+            licenses {
+                license {
+                    name 'The Apache License 2.0'
+                    url 'https://opensource.org/licenses/Apache-2.0'
+                }
+            }
+            scm {
+                connection 'https://github.com/arefbhrn/JustifiedTextView'
+                url 'https://github.com/arefbhrn/JustifiedTextView'
+
+            }
+            developers {
+                developer {
+                    id = 'arefbhrn'
+                    name 'Aref Bahreini Nejad'
+                }
+            }
+        }
+    }
+}
+
