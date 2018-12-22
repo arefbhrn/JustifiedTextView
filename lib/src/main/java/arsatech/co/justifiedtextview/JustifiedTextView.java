@@ -1,16 +1,18 @@
 package arsatech.co.justifiedtextview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
 
-public class JustifiedTextView extends android.support.v7.widget.AppCompatTextView {
+public class JustifiedTextView extends AppCompatTextView {
 
     private Paint paint = new Paint();
     private boolean wrapEnabled;
@@ -41,6 +43,10 @@ public class JustifiedTextView extends android.support.v7.widget.AppCompatTextVi
         this.cacheEnabled = cacheEnabled;
     }
 
+    public void setText(String st) {
+        super.setText(st);
+    }
+
     public void setText(CharSequence st, boolean wrap) {
         wrapEnabled = wrap;
         super.setText(st);
@@ -56,6 +62,7 @@ public class JustifiedTextView extends android.support.v7.widget.AppCompatTextVi
         _align = align;
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         // If wrap is disabled then,
@@ -64,9 +71,9 @@ public class JustifiedTextView extends android.support.v7.widget.AppCompatTextVi
             super.onDraw(canvas);
             return;
         }
-        // Active canas needs to be set
+        // Active canvas needs to be set
         // based on cacheEnabled
-        Canvas activeCanvas = null;
+        Canvas activeCanvas;
         // Set the active canvas based on
         // whether cache is enabled
         if (cacheEnabled) {
@@ -96,13 +103,13 @@ public class JustifiedTextView extends android.support.v7.widget.AppCompatTextVi
         //minus out the paddings pixel
         float dirtyRegionWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         int maxLines = Integer.MAX_VALUE;
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             maxLines = getMaxLines();
         }
         int lines = 1;
-        String[] blocks = fromHtml(getText().toString()).toString().split("((?<=\n)|(?=\n))");
-        float horizontalFontOffset = 0;
+        String[] blocks = fromHtml(getText().toString()).split("((?<=\n)|(?=\n))");
+        float horizontalFontOffset;
         float verticalOffset = horizontalFontOffset = getLineHeight() - 0.5f;
         float spaceOffset = paint.measureText(" ");
         for (int i = 0; i < blocks.length && lines <= maxLines; i++) {
@@ -122,7 +129,7 @@ public class JustifiedTextView extends android.support.v7.widget.AppCompatTextVi
             String wrappedLine = ((String) wrappedObj[0]);
             float wrappedEdgeSpace = (Float) wrappedObj[1];
             String[] lineAsWords = wrappedLine.split(" ");
-            float strecthOffset = wrappedEdgeSpace != Float.MIN_VALUE ? wrappedEdgeSpace / (lineAsWords.length - 1) : 0;
+            float stretchOffset = wrappedEdgeSpace != Float.MIN_VALUE ? wrappedEdgeSpace / (lineAsWords.length - 1) : 0;
             for (int j = 0; j < lineAsWords.length; j++) {
                 String word = lineAsWords[j];
                 if (lines == maxLines && j == lineAsWords.length - 1) {
@@ -141,9 +148,9 @@ public class JustifiedTextView extends android.support.v7.widget.AppCompatTextVi
                     activeCanvas.drawText(word, horizontalOffset, verticalOffset, paint);
                 }
                 if (_align == Align.RIGHT)
-                    horizontalOffset -= paint.measureText(word) + spaceOffset + strecthOffset;
+                    horizontalOffset -= paint.measureText(word) + spaceOffset + stretchOffset;
                 else
-                    horizontalOffset += paint.measureText(word) + spaceOffset + strecthOffset;
+                    horizontalOffset += paint.measureText(word) + spaceOffset + stretchOffset;
             }
             lines++;
             if (blocks[i].length() > 0) {

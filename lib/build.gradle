@@ -8,12 +8,12 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 101
-        versionName "1.0.1"
+        versionCode 102
+        versionName "1.0.2"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,7 +35,7 @@ install {
             packaging 'aar'
             groupId 'com.arefbhrn.libraries'
             artifactId 'justifiedtextview'
-            version '1.0.1'
+            version '1.0.2'
 
             licenses {
                 license {

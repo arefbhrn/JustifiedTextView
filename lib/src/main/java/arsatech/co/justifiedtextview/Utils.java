@@ -18,7 +18,7 @@ public class Utils {
         String block;
         String[] lineAsWords;
         String wrappedLine;
-        String smb = "";
+        StringBuilder smb = new StringBuilder();
         Object[] wrappedObj;
 
         // Pull widget properties
@@ -40,7 +40,7 @@ public class Utils {
             if (block.length() == 0) {
                 continue;
             } else if (block.equals("\n")) {
-                smb += block;
+                smb.append(block);
                 continue;
             }
 
@@ -55,21 +55,20 @@ public class Utils {
             spacesToSpread = (int) (wrappedEdgeSpace != Float.MIN_VALUE ? wrappedEdgeSpace / spaceOffset : 0);
 
             for (String word : lineAsWords) {
-                smb += word + " ";
+                smb.append(word).append(" ");
 
                 if (--spacesToSpread > 0) {
-                    smb += " ";
+                    smb.append(" ");
                 }
             }
 
-            smb = smb.trim();
-
+            smb = new StringBuilder(smb.toString().trim());
 
             if (blocks[i].length() > 0) {
                 blocks[i] = blocks[i].substring(wrappedLine.length());
 
                 if (blocks[i].length() > 0) {
-                    smb += "\n";
+                    smb.append("\n");
                 }
 
                 i--;
@@ -77,24 +76,24 @@ public class Utils {
         }
 
         textView.setGravity(Gravity.LEFT);
-        textView.setText(smb);
+        textView.setText(smb.toString());
     }
 
     public static Object[] createWrappedLine(String block, Paint paint, float spaceOffset, float maxWidth) {
-        float cacheWidth = maxWidth;
+        float cacheWidth;
         float origMaxWidth = maxWidth;
 
-        String line = "";
+        StringBuilder line = new StringBuilder();
 
         for (String word : block.split("\\s")) {
             cacheWidth = paint.measureText(word);
             maxWidth -= cacheWidth;
 
             if (maxWidth <= 0) {
-                return new Object[]{line, maxWidth + cacheWidth + spaceOffset};
+                return new Object[]{line.toString(), maxWidth + cacheWidth + spaceOffset};
             }
 
-            line += word + " ";
+            line.append(word).append(" ");
             maxWidth -= spaceOffset;
 
         }
@@ -102,7 +101,7 @@ public class Utils {
         if (paint.measureText(block) <= origMaxWidth) {
             return new Object[]{block, Float.MIN_VALUE};
         }
-        return new Object[]{line, maxWidth};
+        return new Object[]{line.toString(), maxWidth};
     }
 
     private final static String SYSTEM_NEWLINE = "\n";
@@ -116,52 +115,54 @@ public class Utils {
         float width = origWidth - 5;
         for (int x = 0; x < splits.length; x++)
             if (p.measureText(splits[x]) > width) {
-                splits[x] = wrap(splits[x], width, p);
+                splits[x] = wrap(splits[x], width);
                 String[] microSplits = splits[x].split(SYSTEM_NEWLINE);
                 for (int y = 0; y < microSplits.length - 1; y++)
-                    microSplits[y] = justify(removeLast(microSplits[y], " "), width, p);
+                    microSplits[y] = justify(removeLastSpace(microSplits[y]), width);
                 StringBuilder smb_internal = new StringBuilder();
                 for (int z = 0; z < microSplits.length; z++)
-                    smb_internal.append(microSplits[z] + ((z + 1 < microSplits.length) ? SYSTEM_NEWLINE : ""));
+                    smb_internal.append(microSplits[z]).append((z + 1 < microSplits.length) ? SYSTEM_NEWLINE : "");
                 splits[x] = smb_internal.toString();
             }
         final StringBuilder smb = new StringBuilder();
         for (String cleaned : splits)
-            smb.append(cleaned + SYSTEM_NEWLINE);
+            smb.append(cleaned).append(SYSTEM_NEWLINE);
         tv.setGravity(Gravity.LEFT);
         tv.setText(smb);
     }
 
-    private static String wrap(String s, float width, Paint p) {
+    private static String wrap(String s, float width) {
         String[] str = s.split("\\s"); //regex
         StringBuilder smb = new StringBuilder(); //save memory
         smb.append(SYSTEM_NEWLINE);
         for (String aStr : str) {
-            float length = p.measureText(aStr);
+            float length = Utils.p.measureText(aStr);
             String[] pieces = smb.toString().split(SYSTEM_NEWLINE);
             try {
-                if (p.measureText(pieces[pieces.length - 1]) + length > width)
+                if (Utils.p.measureText(pieces[pieces.length - 1]) + length > width)
                     smb.append(SYSTEM_NEWLINE);
             } catch (Exception ignored) {
             }
-            smb.append(aStr + " ");
+            smb.append(aStr).append(" ");
         }
         return smb.toString().replaceFirst(SYSTEM_NEWLINE, "");
     }
 
-    private static String removeLast(String s, String g) {
-        if (s.contains(g)) {
-            int index = s.lastIndexOf(g);
-            int indexEnd = index + g.length();
-            if (index == 0) return s.substring(1);
-            else if (index == s.length() - 1) return s.substring(0, index);
+    private static String removeLastSpace(String s) {
+        if (s.contains(" ")) {
+            int index = s.lastIndexOf(" ");
+            int indexEnd = index + 1;
+            if (index == 0)
+                return s.substring(1);
+            else if (index == s.length() - 1)
+                return s.substring(0, index);
             else
                 return s.substring(0, index) + s.substring(indexEnd);
         }
         return s;
     }
 
-    private static String justifyOperation(String s, float width, Paint p) {
+    private static String justifyOperation(String s, float width) {
         float holder = (float) (COMPLEXITY * Math.random());
         while (s.contains(Float.toString(holder)))
             holder = (float) (COMPLEXITY * Math.random());
@@ -169,17 +170,17 @@ public class Utils {
         float lessThan = width;
         int timeOut = 100;
         int current = 0;
-        while (p.measureText(s) < lessThan && current < timeOut) {
+        while (Utils.p.measureText(s) < lessThan && current < timeOut) {
             s = s.replaceFirst(" ([^" + holder_string + "])", " " + holder_string + "$1");
-            lessThan = p.measureText(holder_string) + lessThan - p.measureText(" ");
+            lessThan = Utils.p.measureText(holder_string) + lessThan - Utils.p.measureText(" ");
             current++;
         }
         return s.replaceAll(holder_string, " ");
     }
 
-    private static String justify(String s, float width, Paint p) {
-        while (p.measureText(s) < width) {
-            s = justifyOperation(s, width, p);
+    private static String justify(String s, float width) {
+        while (Utils.p.measureText(s) < width) {
+            s = justifyOperation(s, width);
         }
         return s;
     }
