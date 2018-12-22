@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
     }
     buildTypes {
         release {
@@ -35,7 +35,7 @@ install {
             packaging 'aar'
             groupId 'com.arefbhrn.libraries'
             artifactId 'justifiedtextview'
-            version '1.0.2'
+            version '1.0.3'
 
             licenses {
                 license {
