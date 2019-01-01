@@ -8,8 +8,16 @@ A library to achieve justified TextView for both RTL and LTR texts.
 Installation
 ===============================
 
-Gradle
+**Gradle**
 
+*AndroidX* library version:
+```
+dependencies {
+    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.4'
+}
+```
+
+*android.support* library version:
 ```
 dependencies {
     implementation 'com.github.arefbhrn:JustifiedTextView:1.0.3'
