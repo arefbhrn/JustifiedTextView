@@ -4,7 +4,7 @@ import android.graphics.Paint;
 import android.view.Gravity;
 import android.widget.TextView;
 
-public class Utils {
+class Utils {
 
     public static void justify(TextView textView) {
         Paint paint = new Paint();
