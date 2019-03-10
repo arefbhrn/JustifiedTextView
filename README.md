@@ -20,7 +20,7 @@ dependencies {
 *android.support* library version:
 ```
 dependencies {
-    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.3'
+    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.5'
 }
 ```
 
