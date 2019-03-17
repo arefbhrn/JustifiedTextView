@@ -7,11 +7,10 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
-
-import androidx.appcompat.widget.AppCompatTextView;
 
 public class JustifiedTextView extends AppCompatTextView {
 
