@@ -13,14 +13,14 @@ Installation
 *AndroidX* library version:
 ```
 dependencies {
-    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.7'
+    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.6'
 }
 ```
 
 *android.support* library version:
 ```
 dependencies {
-    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.3'
+    implementation 'com.github.arefbhrn:JustifiedTextView:1.0.5'
 }
 ```
 
